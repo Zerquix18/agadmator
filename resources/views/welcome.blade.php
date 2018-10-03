@@ -42,6 +42,9 @@
   <div id="app"></div>
 </div>
 
+<script>
+  window.completeUrl = "{{ route('complete') }}";
+</script>
 <script src="{{ asset('js/manifest.js') }}"></script>
 <script src="{{ asset('js/vendor.js') }}"></script>
 <script src="{{ asset('js/app.js') }}"></script>

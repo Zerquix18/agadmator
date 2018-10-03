@@ -15,5 +15,5 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/videos/complete', 'VideoController@complete');
-Route::get('/videos/search', 'VideoController@search');
+Route::get('/videos/complete', 'VideoController@complete')->name('complete');
+Route::get('/videos/search', 'VideoController@search')->name('search');

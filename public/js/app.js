@@ -6,7 +6,7 @@ webpackJsonp([0],[
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(4);
-module.exports = __webpack_require__(13);
+module.exports = __webpack_require__(17);
 
 
 /***/ }),
@@ -21,7 +21,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_buefy___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_buefy__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_buefy_dist_buefy_css__ = __webpack_require__(8);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_buefy_dist_buefy_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_buefy_dist_buefy_css__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_Main_vue__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_Main_vue__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_Main_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__components_Main_vue__);
 
 
@@ -626,22 +626,14 @@ module.exports = function (css) {
 
 /***/ }),
 /* 13 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 14 */,
-/* 15 */,
-/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-var normalizeComponent = __webpack_require__(17)
+var normalizeComponent = __webpack_require__(14)
 /* script */
-var __vue_script__ = __webpack_require__(18)
+var __vue_script__ = __webpack_require__(15)
 /* template */
-var __vue_template__ = __webpack_require__(19)
+var __vue_template__ = __webpack_require__(16)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -680,7 +672,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 17 */
+/* 14 */
 /***/ (function(module, exports) {
 
 /* globals __VUE_SSR_CONTEXT__ */
@@ -789,7 +781,7 @@ module.exports = function normalizeComponent (
 
 
 /***/ }),
-/* 18 */
+/* 15 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -842,19 +834,80 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
+      autocomplete: {
+        available: {},
+        selected: {},
+        isLoading: false
+      },
       results: [],
-      loading: false,
+      isLoading: false,
       message: 'Fill at least one field and click Search!'
     };
+  },
+  methods: {
+    getData: function getData(which) {
+      var _this = this;
+
+      var toCamelCase = {
+        white_pieces: 'whitePieces',
+        black_pieces: 'blackPieces',
+        opening: 'opening',
+        event: 'event',
+        game_name: 'gameName'
+      };
+      var option = toCamelCase[which];
+      var value = this.autocomplete.selected[option];
+
+      this.autocomplete.available[option] = [];
+      this.autocomplete.isLoading = true;
+
+      fetch(window.completeUrl + '?' + which + '=' + value).then(function (response) {
+        return response.json();
+      }).then(function (result) {
+        console.log(result);
+        _this.autocomplete.available[option] = result[which];
+      }).finally(function () {
+        _this.autocomplete.isLoading = false;
+      });
+    }
   }
 });
 
 /***/ }),
-/* 19 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -876,11 +929,28 @@ var render = function() {
               "b-field",
               { staticClass: "column is-one-quarter" },
               [
-                _c("b-input", {
+                _c("b-autocomplete", {
                   attrs: {
                     placeholder: "White pieces",
                     type: "text",
+                    data: _vm.autocomplete.available.whitePieces,
+                    loading: _vm.autocomplete.isLoading,
                     icon: "chess-pawn"
+                  },
+                  on: {
+                    input: function() {
+                      return _vm.getData("white_pieces")
+                    },
+                    select: function(option) {
+                      return (_vm.autocomplete.selected.whitePieces = option)
+                    }
+                  },
+                  model: {
+                    value: _vm.autocomplete.selected.whitePieces,
+                    callback: function($$v) {
+                      _vm.$set(_vm.autocomplete.selected, "whitePieces", $$v)
+                    },
+                    expression: "autocomplete.selected.whitePieces"
                   }
                 })
               ],
@@ -891,11 +961,28 @@ var render = function() {
               "b-field",
               { staticClass: "column is-one-quarter" },
               [
-                _c("b-input", {
+                _c("b-autocomplete", {
                   attrs: {
-                    placeholder: "Black Pieces",
+                    placeholder: "Black pieces",
                     type: "text",
+                    data: _vm.autocomplete.available.blackPieces,
+                    loading: _vm.autocomplete.isLoading,
                     icon: "chess-pawn"
+                  },
+                  on: {
+                    input: function() {
+                      return _vm.getData("black_pieces")
+                    },
+                    select: function(option) {
+                      return (_vm.autocomplete.selected.blackPieces = option)
+                    }
+                  },
+                  model: {
+                    value: _vm.autocomplete.selected.blackPieces,
+                    callback: function($$v) {
+                      _vm.$set(_vm.autocomplete.selected, "blackPieces", $$v)
+                    },
+                    expression: "autocomplete.selected.blackPieces"
                   }
                 })
               ],
@@ -906,11 +993,28 @@ var render = function() {
               "b-field",
               { staticClass: "column is-one-quarter" },
               [
-                _c("b-input", {
+                _c("b-autocomplete", {
                   attrs: {
                     placeholder: "Opening",
                     type: "text",
+                    data: _vm.autocomplete.available.opening,
+                    loading: _vm.autocomplete.isLoading,
                     icon: "chess-board"
+                  },
+                  on: {
+                    input: function() {
+                      return _vm.getData("opening")
+                    },
+                    select: function(option) {
+                      return (_vm.autocomplete.selected.opening = option)
+                    }
+                  },
+                  model: {
+                    value: _vm.autocomplete.selected.opening,
+                    callback: function($$v) {
+                      _vm.$set(_vm.autocomplete.selected, "opening", $$v)
+                    },
+                    expression: "autocomplete.selected.opening"
                   }
                 })
               ],
@@ -921,8 +1025,29 @@ var render = function() {
               "b-field",
               { staticClass: "column is-one-quarter" },
               [
-                _c("b-input", {
-                  attrs: { placeholder: "Event", type: "text", icon: "trophy" }
+                _c("b-autocomplete", {
+                  attrs: {
+                    placeholder: "Event",
+                    type: "text",
+                    data: _vm.autocomplete.available.event,
+                    loading: _vm.autocomplete.isLoading,
+                    icon: "trophy"
+                  },
+                  on: {
+                    input: function() {
+                      return _vm.getData("event")
+                    },
+                    select: function(option) {
+                      return (_vm.autocomplete.selected.event = option)
+                    }
+                  },
+                  model: {
+                    value: _vm.autocomplete.selected.event,
+                    callback: function($$v) {
+                      _vm.$set(_vm.autocomplete.selected, "event", $$v)
+                    },
+                    expression: "autocomplete.selected.event"
+                  }
                 })
               ],
               1
@@ -939,11 +1064,21 @@ var render = function() {
               "b-field",
               { staticClass: "column is-one-quarter" },
               [
-                _c("b-input", {
+                _c("b-autocomplete", {
                   attrs: {
                     placeholder: "Game name",
                     type: "text",
+                    data: _vm.autocomplete.available.game_name,
+                    loading: _vm.autocomplete.isLoading,
                     icon: "chess"
+                  },
+                  on: {
+                    input: function() {
+                      return _vm.getData("game_name")
+                    },
+                    select: function(option) {
+                      return (_vm.autocomplete.selected.game_name = option)
+                    }
                   }
                 })
               ],
@@ -978,6 +1113,12 @@ if (false) {
     require("vue-hot-reload-api")      .rerender("data-v-b9c20fb8", module.exports)
   }
 }
+
+/***/ }),
+/* 17 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
 
 /***/ })
 ],[3]);
