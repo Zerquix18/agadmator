@@ -62,9 +62,8 @@ class GetVideos extends Command
             $event      = $this->getEvent($description);
             $moves      = $this->getMoves($description);
 
-            $video = new Video;
+            $video = Video::firstOrNew(['id' => $id]);
 
-            $video->id           = $id;
             $video->title        = $title;
             $video->video_date   = $video_date;
             $video->white_pieces = $white_pieces;
@@ -73,7 +72,7 @@ class GetVideos extends Command
             $video->game_name    = $game_name;
             $video->event        = $event;
             $video->moves        = $moves;
-            
+
             $video->save();
         }
     }
@@ -85,12 +84,12 @@ class GetVideos extends Command
      */
     private function getPlayers(string $description): array
     {
-        $regex = '/(^|\n)(([\w -\(\)]+) vs ([\w -\(\)]+))/';
+        $regex = '/(^|\n)(([\w -\(\)]+) vs ([\w -\(\)]+))$/m';
         if (! preg_match($regex, $description, $matches)) {
             return ['', ''];
         }
-        $white = $matches[3];
-        $black = $matches[4];
+        $white = trim($matches[3]);
+        $black = trim($matches[4]);
 
         $white = str_replace('#agadmator ', '', $white);
         return [$white, $black];
