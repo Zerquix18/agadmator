@@ -81,7 +81,7 @@
         <div class="card">
           <div class="card-image">
             <figure class="video-container">
-              <embed src="https://www.youtube.com/embed/P7Z7pAoaK-8" alt="Placeholder image">
+              <embed :src="`https://www.youtube.com/embed/${video.id}`" alt="Placeholder image">
             </figure>
           </div>
           <div class="card-content">
