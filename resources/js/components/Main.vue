@@ -3,7 +3,7 @@
   <div>
     <h2 class="title">Search</h2>
   </div>
-  <form method="POST" style="margin-top: 25px">
+  <form style="margin-top: 25px" id="main-form">
     <div class="columns">
       <b-field class="column is-one-quarter">
         <b-autocomplete
@@ -67,10 +67,39 @@
         </b-autocomplete>
       </b-field>
     </div>
+    <div class="has-text-right">
+      <input type="submit" class="button is-primary is-medium" v-on:click="search">
+    </div>
   </form>
   <hr>
-  <div class="result-message">
+  <div v-if="result.length === 0" class="result-message">
     <span>{{ message }}</span>
+  </div>
+  <div v-else>
+    <div class="columns is-multiline">
+      <div v-for="video in result" class="column is-one-third">
+        <div class="card">
+          <div class="card-image">
+            <figure class="video-container">
+              <embed src="https://www.youtube.com/embed/P7Z7pAoaK-8" alt="Placeholder image">
+            </figure>
+          </div>
+          <div class="card-content">
+            <div class="media">
+              <div class="media-content">
+                <p class="title is-4">{{ video.white_pieces }} vs {{ video.black_pieces }}</p>
+                <p v-if="video.game_name" class="subtitle is-6">{{ video.game_name }}</p>
+                <p class="subtitle is-6">{{ video.event }}</p>
+                <p class="subtitle is-6">{{ video.opening }}</p>
+              </div>
+            </div>
+            <div class="content">
+              <time>Uploaded on {{ video.video_date }}</time>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 </template>
@@ -84,7 +113,7 @@ export default {
         selected: {},
         isLoading: false,
       },
-      results: [],
+      result: [],
       isLoading: false,
       message: 'Fill at least one field and click Search!'
     };
@@ -109,11 +138,41 @@ export default {
           return response.json();
       })
       .then((result) => {
-        console.log(result);
         this.autocomplete.available[option] = result[which];
       })
       .finally(() => {
         this.autocomplete.isLoading = false;
+      });
+    },
+
+    search: function (e) {
+      e.preventDefault();
+      const snakeCase = {
+        whitePieces: 'white_pieces',
+        blackPieces: 'black_pieces',
+        gameName: 'game_name'
+      };
+
+      const fields = {};
+      
+      for (const field in this.autocomplete.selected) {
+        if (field in snakeCase) {
+          fields[snakeCase[field]] = this.autocomplete.selected[field];
+        } else {
+          fields[field] = this.autocomplete.selected[field];
+        }
+      }
+
+      const qs = Object.entries(fields)
+                 .map(pair => pair.map(encodeURIComponent).join('='))
+                 .join('&');
+
+      fetch(window.searchUrl + '?' + qs)
+      .then((response) => {
+        return response.json();
+      }).then((result) => {
+        console.log(result);
+        this.result = result.videos;
       });
     }
   }

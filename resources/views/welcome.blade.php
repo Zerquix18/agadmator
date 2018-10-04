@@ -44,9 +44,10 @@
 
 <script>
   window.completeUrl = "{{ route('complete') }}";
+  window.searchUrl   = "{{ route('search') }}";
 </script>
-<script src="{{ asset('js/manifest.js') }}"></script>
-<script src="{{ asset('js/vendor.js') }}"></script>
-<script src="{{ asset('js/app.js') }}"></script>
+<script src="{{ asset(mix('js/manifest.js')) }}"></script>
+<script src="{{ asset(mix('js/vendor.js')) }}"></script>
+<script src="{{ asset(mix('js/app.js')) }}"></script>
 </body>
 </html>

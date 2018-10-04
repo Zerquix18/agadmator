@@ -863,6 +863,35 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -872,7 +901,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         selected: {},
         isLoading: false
       },
-      results: [],
+      result: [],
       isLoading: false,
       message: 'Fill at least one field and click Search!'
     };
@@ -897,10 +926,41 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       fetch(window.completeUrl + '?' + which + '=' + value).then(function (response) {
         return response.json();
       }).then(function (result) {
-        console.log(result);
         _this.autocomplete.available[option] = result[which];
       }).finally(function () {
         _this.autocomplete.isLoading = false;
+      });
+    },
+
+    search: function search(e) {
+      var _this2 = this;
+
+      e.preventDefault();
+      var snakeCase = {
+        whitePieces: 'white_pieces',
+        blackPieces: 'black_pieces',
+        gameName: 'game_name'
+      };
+
+      var fields = {};
+
+      for (var field in this.autocomplete.selected) {
+        if (field in snakeCase) {
+          fields[snakeCase[field]] = this.autocomplete.selected[field];
+        } else {
+          fields[field] = this.autocomplete.selected[field];
+        }
+      }
+
+      var qs = Object.entries(fields).map(function (pair) {
+        return pair.map(encodeURIComponent).join('=');
+      }).join('&');
+
+      fetch(window.searchUrl + '?' + qs).then(function (response) {
+        return response.json();
+      }).then(function (result) {
+        console.log(result);
+        _this2.result = result.videos;
       });
     }
   }
@@ -919,7 +979,7 @@ var render = function() {
     _vm._v(" "),
     _c(
       "form",
-      { staticStyle: { "margin-top": "25px" }, attrs: { method: "POST" } },
+      { staticStyle: { "margin-top": "25px" }, attrs: { id: "main-form" } },
       [
         _c(
           "div",
@@ -1086,15 +1146,71 @@ var render = function() {
             )
           ],
           1
-        )
+        ),
+        _vm._v(" "),
+        _c("div", { staticClass: "has-text-right" }, [
+          _c("input", {
+            staticClass: "button is-primary is-medium",
+            attrs: { type: "submit" },
+            on: { click: _vm.search }
+          })
+        ])
       ]
     ),
     _vm._v(" "),
     _c("hr"),
     _vm._v(" "),
-    _c("div", { staticClass: "result-message" }, [
-      _c("span", [_vm._v(_vm._s(_vm.message))])
-    ])
+    _vm.result.length === 0
+      ? _c("div", { staticClass: "result-message" }, [
+          _c("span", [_vm._v(_vm._s(_vm.message))])
+        ])
+      : _c("div", [
+          _c(
+            "div",
+            { staticClass: "columns is-multiline" },
+            _vm._l(_vm.result, function(video) {
+              return _c("div", { staticClass: "column is-one-third" }, [
+                _c("div", { staticClass: "card" }, [
+                  _vm._m(1, true),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "card-content" }, [
+                    _c("div", { staticClass: "media" }, [
+                      _c("div", { staticClass: "media-content" }, [
+                        _c("p", { staticClass: "title is-4" }, [
+                          _vm._v(
+                            _vm._s(video.white_pieces) +
+                              " vs " +
+                              _vm._s(video.black_pieces)
+                          )
+                        ]),
+                        _vm._v(" "),
+                        video.game_name
+                          ? _c("p", { staticClass: "subtitle is-6" }, [
+                              _vm._v(_vm._s(video.game_name))
+                            ])
+                          : _vm._e(),
+                        _vm._v(" "),
+                        _c("p", { staticClass: "subtitle is-6" }, [
+                          _vm._v(_vm._s(video.event))
+                        ]),
+                        _vm._v(" "),
+                        _c("p", { staticClass: "subtitle is-6" }, [
+                          _vm._v(_vm._s(video.opening))
+                        ])
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "content" }, [
+                      _c("time", [
+                        _vm._v("Uploaded on " + _vm._s(video.video_date))
+                      ])
+                    ])
+                  ])
+                ])
+              ])
+            })
+          )
+        ])
   ])
 }
 var staticRenderFns = [
@@ -1103,6 +1219,21 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", [_c("h2", { staticClass: "title" }, [_vm._v("Search")])])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "card-image" }, [
+      _c("figure", { staticClass: "video-container" }, [
+        _c("embed", {
+          attrs: {
+            src: "https://www.youtube.com/embed/P7Z7pAoaK-8",
+            alt: "Placeholder image"
+          }
+        })
+      ])
+    ])
   }
 ]
 render._withStripped = true
