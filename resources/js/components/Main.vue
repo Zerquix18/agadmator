@@ -135,10 +135,15 @@ export default {
 
       fetch(window.completeUrl + '?' + which + '=' + value)
       .then((response) => {
+        if (response.ok) {
           return response.json();
+        }
+        return null;
       })
       .then((result) => {
-        this.autocomplete.available[option] = result[which];
+        if (result) {
+          this.autocomplete.available[option] = result[which];
+        }
       })
       .finally(() => {
         this.autocomplete.isLoading = false;
@@ -169,10 +174,19 @@ export default {
 
       fetch(window.searchUrl + '?' + qs)
       .then((response) => {
-        return response.json();
+        if (response.ok) {
+          return response.json();
+        }
       }).then((result) => {
-        console.log(result);
+        if (! result) {
+          return;
+        }
         this.result = result.videos;
+        if (this.result.length === 0) {
+          this.message = 'No videos found. Please try with a different criteria';
+        }
+      }).catch((error) => {
+        this.message = 'There was a problem while getting the results. Please try again';
       });
     }
   }
