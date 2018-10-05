@@ -40,21 +40,18 @@ class GetVideos extends Command
     {
         $this->line('Getting videos...');
         $youtube_api = new YoutubeAPI;
-        $videos = $youtube_api->getVideosFromChannel('UCL5YbN5WLFD8dLIegT5QAbA');
-        $videos = array_column($videos, 'id');
-        $videos = array_column($videos, 'videoId');
-        
-        $details = $youtube_api->getVideoDetails($videos);
-        
-        $counter = 1;
-        foreach ($details as $video_data) {
+        $videos = $youtube_api->getVideosFromPlaylist('UUL5YbN5WLFD8dLIegT5QAbA');
+
+        foreach ($videos as $video_data) {
+            $video_data = $video_data['snippet'];
+
             $description = $video_data['description'];
             list($white_pieces, $black_pieces) = $this->getPlayers($description);
             if (! $white_pieces) {
                 continue;
             }
 
-            $id         = $video_data['id'];
+            $id         = $video_data['resourceId']['videoId'];
             $title      = $video_data['title'];
             $video_date = new \DateTime($video_data['publishedAt']);
             $opening    = $this->getOpening($description);
