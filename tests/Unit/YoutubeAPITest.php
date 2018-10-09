@@ -16,7 +16,7 @@ class YoutubeAPITest extends TestCase
     public function testGetVideos()
     {
         $youtube_api = new YoutubeAPI;
-        $videos = $youtube_api->getVideosFromChannel('UCL5YbN5WLFD8dLIegT5QAbA');
+        $videos = $youtube_api->getVideosFromPlaylist('UUL5YbN5WLFD8dLIegT5QAbA');
         $this->assertNotNull($videos);
     }
 }

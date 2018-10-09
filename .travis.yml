@@ -1,0 +1,49 @@
+os:
+  - linux
+
+language: php
+
+php:
+  - '7.2'
+
+
+before_script:
+  - composer self-update
+  - composer install --no-interaction
+  - touch .env
+  - mysql -e 'create database homestead_test;'
+  - php artisan migrate
+  - nvm install 7.7.1
+  - npm install npm@latest -g
+  - npm install
+
+script:
+  - vendor/bin/phpunit
+  - php artisan get_videos
+  - npm run production
+
+services:
+  - mysql
+
+addons:
+  apt:
+    sources:
+      - mysql-5.7-trusty
+    packages:
+      - mysql-server
+
+dist: trusty
+sudo: required
+
+
+cache:
+  directories:
+    - node_modules
+    - vendor
+
+notifications:
+  email:
+    recipients:
+      - malbertoa_11@hotmail.com
+    on_success: never
+    on_failure: always
