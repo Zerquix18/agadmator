@@ -42,6 +42,14 @@
   <div id="app"></div>
 </div>
 
+<footer class="footer">
+  <div class="content has-text-centered">
+    <p>
+      Built with ❤ by <a href="https://twitter.com/zerquix18">Luis</a>. The source code is available on <a href="https://github.com/zerquix18/agadmator">Github</a>.
+    </p>
+  </div>
+</footer>
+
 <a href="https://github.com/zerquix18/agadmator"><img style="z-index: 10000000; position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
 
 <script>
