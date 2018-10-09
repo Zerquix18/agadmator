@@ -12,7 +12,7 @@ before_script:
   - composer install --no-interaction
   - touch .env
   - mysql -e 'create database homestead_test;'
-  - php artisan migrate
+  - php artisan migrate -f
   - nvm install 7.7.1
   - npm install npm@latest -g
   - npm install
