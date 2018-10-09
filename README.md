@@ -1,5 +1,7 @@
 ## Agadmator videos
 
+<p align="center"><a href="https://travis-ci.com/Zerquix18/agadmator"><img src="https://travis-ci.com/Zerquix18/agadmator.svg?token=qGqEVpc9sLN2wwiwFiJN&branch=master" alt="Build Status"></a></p>
+
 [Agadmator](https://www.youtube.com/agadmator) is a Youtube channel that comments chess videos. On it, you'll find a lot of chess games commented in a funny and entertaining way.
 
 The goal of this project was to learn Vue.js by building something and this is the best idea I could get (I'm not very creative). With this, you can filter his videos, so you can:
