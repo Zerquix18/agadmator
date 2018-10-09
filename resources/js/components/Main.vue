@@ -21,7 +21,7 @@
   </div>
   <div v-else>
     <div class="columns is-multiline">
-      <VideoItem v-for="video in result" v-bind:key="video.id" :video="video" />
+      <VideoItem v-for="video in resultToDisplay" v-bind:key="video.id" :video="video" />
     </div>
   </div>
 </div>
@@ -39,7 +39,9 @@ export default {
   data: function () {
     return {
       result: [],
-      message: 'Fill at least one field and click Search!'
+      resultToDisplay: [],
+      message: 'Fill at least one field and click Search!',
+      loadingMore: false,
     };
   },
 
@@ -74,14 +76,38 @@ export default {
         if (! result) {
           return;
         }
+
         this.result = result.videos;
+        this.resultToDisplay = this.result.splice(0, 5);
+
         if (this.result.length === 0) {
           this.message = 'No videos found. Please try with a different criteria';
         }
       }).catch((error) => {
         this.message = 'There was a problem while getting the results. Please try again';
       });
-    }
+    },
+
+    onScroll: function () {
+      if (! ((window.innerHeight + window.scrollY) >= (document.body.offsetHeight - 400))) {
+        return;
+      }
+      if (this.loadingMore) {
+        return;
+      }
+      
+      this.loadingMore = true;
+      this.resultToDisplay = this.result.slice(0, this.resultToDisplay.length + 5);
+      this.loadingMore     = false;
+    },
+  },
+
+  mounted: function () {
+    window.addEventListener('scroll', this.onScroll);
+  },
+
+  destroyed: function () {
+    window.removeEventListener('scroll', this.onScroll);
   }
 }
 </script>
